@@ -4,6 +4,10 @@ A very simuple 2D soft body physics simulation implemented in Java using spring-
 
 
 
+https://github.com/user-attachments/assets/806290d1-861f-494b-bfc6-a9f71d992195
+
+
+
 ## Model Description
 
 The soft body is constructed as a circular arrangement of N nodes connected by springs:
