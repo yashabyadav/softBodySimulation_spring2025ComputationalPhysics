@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "h:\\yay223\\Dropbox\\Lehigh University Dropbox\\Yashab Yadav\\computational_physics_25\\courseProject\\osp_guide.jar",
+        "h:\\yay223\\Dropbox\\Lehigh University Dropbox\\Yashab Yadav\\computational_physics_25\\courseProject\\osp_csm.jar"
+    ]
+}

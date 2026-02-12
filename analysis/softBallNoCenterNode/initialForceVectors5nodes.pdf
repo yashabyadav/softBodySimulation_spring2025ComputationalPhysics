@@ -1,0 +1,246 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: EpsGraphics2D 0.9.0 by Paul Mutton, http://www.jibble.org/
+%%Title: 
+%%CreationDate: Tue May 06 20:46:11 EDT 2025
+%%BoundingBox: 0 0 388 342
+%%DocumentData: Clean7Bit
+%%DocumentProcessColors: Black
+%%ColorUsage: Color
+%%Origin: 0 0
+%%Pages: 1
+%%Page: 1 1
+%%EndComments
+
+gsave
+-0.0 342.0 translate
+0.2 0.2 0.2 setrgbcolor
+gsave
+newpath
+0.0 -0.0 moveto
+388.0 -0.0 lineto
+388.0 -342.0 lineto
+0.0 -342.0 lineto
+0.0 -0.0 lineto
+closepath
+clip
+newpath
+0.8745098 0.77254903 0.6431373 setrgbcolor
+newpath
+0.0 -0.0 moveto
+388.0 -0.0 lineto
+388.0 -342.0 lineto
+0.0 -342.0 lineto
+0.0 -0.0 lineto
+closepath
+fill
+newpath
+0.0 0.0 0.0 setrgbcolor
+grestore
+gsave
+newpath
+0.0 -0.0 moveto
+0.0 -342.0 lineto
+388.0 -342.0 lineto
+388.0 -0.0 lineto
+closepath
+clip
+newpath
+0.63529414 0.0 1.0 setrgbcolor
+newpath
+91.0 -272.0 moveto
+291.0 -272.0 lineto
+291.0 -282.0 lineto
+91.0 -282.0 lineto
+91.0 -272.0 lineto
+closepath
+stroke
+newpath
+0.0 0.67058825 0.6627451 setrgbcolor
+newpath
+227.0 -170.0 moveto
+165.0 -150.0 lineto
+stroke
+newpath
+0.0 0.67058825 0.6627451 setrgbcolor
+newpath
+227.0 -170.0 moveto
+165.0 -190.0 lineto
+stroke
+newpath
+0.0 0.27058825 0.5372549 setrgbcolor
+newpath
+227.0 -170.0 moveto
+204.0 -138.0 lineto
+stroke
+newpath
+1.0 0.0 0.5921569 setrgbcolor
+newpath
+231.0 -170.0 moveto
+231.0 -172.20914 229.20914 -174.0 227.0 -174.0 curveto
+224.79086 -174.0 223.0 -172.20914 223.0 -170.0 curveto
+223.0 -167.79086 224.79086 -166.0 227.0 -166.0 curveto
+229.20914 -166.0 231.0 -167.79086 231.0 -170.0 curveto
+closepath
+fill
+newpath
+0.18039216 0.19607843 0.34117648 setrgbcolor
+newpath
+227.0 -170.0 moveto
+227.0 -203.0 lineto
+stroke
+newpath
+0.0 0.67058825 0.6627451 setrgbcolor
+newpath
+204.0 -138.0 moveto
+165.0 -190.0 lineto
+stroke
+newpath
+0.0 0.67058825 0.6627451 setrgbcolor
+newpath
+204.0 -138.0 moveto
+204.0 -202.0 lineto
+stroke
+newpath
+0.0 0.27058825 0.5372549 setrgbcolor
+newpath
+204.0 -138.0 moveto
+165.0 -150.0 lineto
+stroke
+newpath
+1.0 0.0 0.5921569 setrgbcolor
+newpath
+208.0 -138.0 moveto
+208.0 -140.20914 206.20914 -142.0 204.0 -142.0 curveto
+201.79086 -142.0 200.0 -140.20914 200.0 -138.0 curveto
+200.0 -135.79086 201.79086 -134.0 204.0 -134.0 curveto
+206.20914 -134.0 208.0 -135.79086 208.0 -138.0 curveto
+closepath
+fill
+newpath
+0.18039216 0.19607843 0.34117648 setrgbcolor
+newpath
+204.0 -138.0 moveto
+204.0 -170.0 lineto
+stroke
+newpath
+0.0 0.67058825 0.6627451 setrgbcolor
+newpath
+165.0 -150.0 moveto
+204.0 -202.0 lineto
+stroke
+newpath
+0.0 0.27058825 0.5372549 setrgbcolor
+newpath
+165.0 -150.0 moveto
+165.0 -190.0 lineto
+stroke
+newpath
+1.0 0.0 0.5921569 setrgbcolor
+newpath
+169.0 -150.0 moveto
+169.0 -152.20914 167.20914 -154.0 165.0 -154.0 curveto
+162.79086 -154.0 161.0 -152.20914 161.0 -150.0 curveto
+161.0 -147.79086 162.79086 -146.0 165.0 -146.0 curveto
+167.20914 -146.0 169.0 -147.79086 169.0 -150.0 curveto
+closepath
+fill
+newpath
+0.18039216 0.19607843 0.34117648 setrgbcolor
+newpath
+165.0 -150.0 moveto
+165.0 -183.0 lineto
+stroke
+newpath
+0.0 0.27058825 0.5372549 setrgbcolor
+newpath
+165.0 -190.0 moveto
+204.0 -202.0 lineto
+stroke
+newpath
+1.0 0.0 0.5921569 setrgbcolor
+newpath
+169.0 -190.0 moveto
+169.0 -192.20914 167.20914 -194.0 165.0 -194.0 curveto
+162.79086 -194.0 161.0 -192.20914 161.0 -190.0 curveto
+161.0 -187.79086 162.79086 -186.0 165.0 -186.0 curveto
+167.20914 -186.0 169.0 -187.79086 169.0 -190.0 curveto
+closepath
+fill
+newpath
+0.18039216 0.19607843 0.34117648 setrgbcolor
+newpath
+165.0 -190.0 moveto
+165.0 -223.0 lineto
+stroke
+newpath
+0.0 0.27058825 0.5372549 setrgbcolor
+newpath
+204.0 -202.0 moveto
+227.0 -170.0 lineto
+stroke
+newpath
+1.0 0.0 0.5921569 setrgbcolor
+newpath
+208.0 -202.0 moveto
+208.0 -204.20914 206.20914 -206.0 204.0 -206.0 curveto
+201.79086 -206.0 200.0 -204.20914 200.0 -202.0 curveto
+200.0 -199.79086 201.79086 -198.0 204.0 -198.0 curveto
+206.20914 -198.0 208.0 -199.79086 208.0 -202.0 curveto
+closepath
+fill
+newpath
+0.18039216 0.19607843 0.34117648 setrgbcolor
+newpath
+204.0 -202.0 moveto
+204.0 -235.0 lineto
+stroke
+newpath
+grestore
+gsave
+newpath
+0.0 -0.0 moveto
+388.0 -0.0 lineto
+388.0 -342.0 lineto
+0.0 -342.0 lineto
+0.0 -0.0 lineto
+closepath
+clip
+newpath
+grestore
+gsave
+newpath
+0.0 -0.0 moveto
+388.0 -0.0 lineto
+388.0 -342.0 lineto
+0.0 -342.0 lineto
+0.0 -0.0 lineto
+closepath
+clip
+newpath
+1.0 setlinewidth
+10.0 setmiterlimit
+0 setlinejoin
+2 setlinecap
+[ ] 0 setdash
+grestore
+gsave
+newpath
+0.0 -0.0 moveto
+0.0 -342.0 lineto
+388.0 -342.0 lineto
+388.0 -0.0 lineto
+closepath
+clip
+newpath
+0.2 0.2 0.2 setrgbcolor
+0.2 0.2 0.2 setrgbcolor
+grestore
+1.0 setlinewidth
+10.0 setmiterlimit
+0 setlinejoin
+2 setlinecap
+[ ] 0 setdash
+grestore
+showpage
+
+%%EOF

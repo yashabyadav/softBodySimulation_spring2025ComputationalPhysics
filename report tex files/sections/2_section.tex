@@ -1,0 +1,42 @@
+\newpage
+\vspace{-1cm}
+{\color{gray}\hrule}
+\begin{center}
+\section{Utils Package}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+
+\begin{multicols}{2}
+The simulation is restricted to two dimensions and in spirits of being object oriented, I wrote a utility package to work with 2D vectors that can be scaled upon in the future.
+\vspace{-0.3cm}
+\subsection{Vec2D}
+Rather than using two variables for each vector (e.g. $x$ and $y$ for position), I made an object \texttt{vec2}, containing both the components.
+The class file contains methods for standard vector operations, for example the dot product:
+\begin{lstlisting}
+public double dot(vec2 other){
+    return (this.x*other.x)+(this.y*other.y);
+}
+\end{lstlisting}
+The entire \texttt{Vec2D.java} file can be found in code listings.\par
+
+The OSP differential equation interfaces are written to work with scalers and cannot work with \texttt{vec2} objects. That is, if I want to solve a vector differential equation, say:
+\begin{align}
+    \frac{d \vec{r}}{dt} = A \vec{r}
+\end{align}
+\\
+where $\vec{\mathbf{r}} = r_{x} \hat{i}+r_{y} \hat{j}$
+I would need the differential equation separately for $r_{x}$ and $r_{y}$:\\
+\begin{align}
+     \frac{dr_{x}}{dt} = A {r_{x}}\\
+     \frac{dr_{y}}{dt} = A {r_{y}}
+\end{align}
+\\
+
+To directly use the differential equation pipline of OSP, I modified the classes: \texttt{AbstractODESolver, ODE, ODESolver, Verlet} to work directly with \texttt{vec2} type objects. These modified classes are also a part of the Utils package and are listed in codeListings section.
+
+\begin{centering}
+    \hspace{10pt}\includegraphics[scale=0.52]{media/softBall2/vec2StateRateArrUpd.jpg}
+\end{centering}
+\end{multicols}
+

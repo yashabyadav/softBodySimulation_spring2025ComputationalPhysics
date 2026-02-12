@@ -1,0 +1,9 @@
+{
+    "java.project.referencedLibraries": [
+        "../osp/src/**/*.java",
+        "../osp/lib/**/*.jar",
+        "osp_guide.jar",
+        "osp_csm.jar"
+    ],
+    "workbench.colorTheme": "Showa Retro Night Downtown"
+}

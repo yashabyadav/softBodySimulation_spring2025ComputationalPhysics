@@ -1,0 +1,330 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{\texttt{SoftBall2} class}
+\textbf{An arrangement of springs and masses to mimic soft body behaviour}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+\subsection{Initialization}
+\begin{centering}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.4]{media/softBallSchematic.jpg}
+        \caption{Schematic of the \texttt{SoftBall2} class showing the arrangement of springs and 6 masses (left) and the springs connecting node 0 (right).}
+        \label{fig:softBallSchematic}
+    \end{figure}
+
+\end{centering}
+
+To initialze a spring mass arrangement to resemble a soft 'ball', similiar to the drawing in \ref{fig:softBallSchematic}, the number of surface nodes, radius of the soft ball, and the coordinate of the center are passed via \texttt{softBall2()} constructor. \par 
+To calculate the coordinate of each surface node, the angular separation between the surface nodes is required, which is given by trivial circle geometry:
+\begin{align}
+    \theta =  \frac{2\pi}{n}
+\end{align}
+
+and then parametric equation of the circle can be used to get the cartesian coordinates each node:
+\begin{align}
+    x_{i} = R \cos (\theta_{i}) \\
+    y_{i} = R \sin (\theta_{i})
+\end{align}
+which is implemented in the softBall2 class as:
+\begin{lstlisting}
+for(int i=0; i<this.n;i++){
+        currMassCoordinate = new vec2(
+            (R*Math.cos((i)*2*Math.PI/n)),
+            (R*Math.sin((i)*2*Math.PI/n))
+            );
+        massList.add(currMassCoordinate);
+        this.stateVec[2*i].assign(
+            currMassCoordinate
+            );
+    }
+\end{lstlisting}
+\par
+Once the soft ball calss is initialized, the equilibrium lengths are calculated using a nested loop and assigned to a 2D matrix. The angular separation between $i^{th}$ and $j^{th}$ node is calculated using:
+\begin{align}
+    \theta_{ij} = \frac{2\pi}{n} | i-j|
+\end{align}
+and then the equilibrium length of the spring joining $i^{th}$ node with $j^{th}$ node can be calculated from this angle:
+\begin{align}
+    l_{ij} = 2R \sin \frac{\theta_{ij}}{2}
+\end{align}
+This is implemented in the softBall2 class as:
+\begin{lstlisting}
+for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            double ang = ((j - i) * 2.0 * Math.PI / n);
+            allSpringsEquilibriumLen[i][j] = Math.abs( R * 2.0 * Math.sin(ang / 2.0));
+        }
+}
+\end{lstlisting}
+\subsection{Forces and constraints}
+In addition to gravity, a given nodes experiences forces from springs of stiffness $k$ from it's nearest neighbors, and forces from springs of stiffness $k_{2}$ from it's non-immediate neighbors. The expressions of these forces on $i^{th}$ surface node are:
+
+\begin{align}
+    f_{i}^{\text{neighbors}} =\, 
+        & (-k\,\Delta  l_{i,i+1}  + c\,|\Delta \vec{v}_{i,i+1}|) \hat{n}_{i,i+1} \nonumber \\
+      +& (-k\,\Delta l_{i,i-1} + c\,|\Delta \vec{v}_{i,i-1}|) \hat{n}_{i,i-1} \label{eq:neighborsForce}\\[30pt]
+    f_{i}^{\text{non-neighbors}} =\,
+        & \sum_{j} (-k_{2}\,\Delta l_{i,j} \nonumber
+        \\
+        & \hspace{30pt} +c_{2}\,|\Delta \vec{v}_{i,j}|)\hat{n}_{i,j} \label{eq:nonNeighborsForce}
+\end{align}
+
+where $c$ and $c_{2}$ are velocity dependent damping factors of springs $k$ and $k2$ respectively, and the sum $j$ goes over all the surface nodes $\forall$ $j \notin {i,i-1,i+1}$.
+
+The spring force is computed at every timestep for all the surface nodes in \texttt{computeAccelaration()} method by invoking the \texttt{calcSpringForceVector()} method, which calculates the forces mentioned in \eqref{eq:neighborsForce} and \eqref{eq:nonNeighborsForce}:
+
+
+\begin{lstlisting}
+private vec2 calcSpringForceVector(double eqbmSpringLen, double currSpringLen, double k, vec2 unitVecAlongSpring, vec2 vel_i,vec2 vel_j, double springDampingFactor){
+        double delL = (currSpringLen-eqbmSpringLen); //compression in the spring
+        //return unitVecAlongSpring.scalerMult(delL);
+        //not sure about the signs yet, will try to both positive and negative
+
+        if(Math.abs(delL)<10E-6){
+            return new vec2(0,0);
+        }
+        else{
+            double relativeVelocityMag = (vel_i.x - vel_j.x) * unitVecAlongSpring.x + (vel_i.y - vel_j.y) * unitVecAlongSpring.y;
+
+            double dampingTerm = springDampingFactor * relativeVelocityMag;
+            return unitVecAlongSpring.scalerMult(k * delL - dampingTerm);
+        }
+    }
+\end{lstlisting}
+
+An additional constriant is collision with ground, which is applied in the \texttt{applyGroundCollision} method as:
+\begin{lstlisting}
+public void applyGroundCollision(double groundY, double bounceDamping, double friction) {
+    for (int i = 0; i < this.n; i++) {
+        vec2 pos = stateVec[2*i];
+        vec2 vel = stateVec[2*i+1];
+        if (pos.y < groundY) {
+            pos.y = groundY;
+            if (vel.y < 0) vel.y *= -bounceDamping;
+            vel.x *= friction; // friction in x direction to stop nodes from sliding in the horizontal direction due to the surface force
+            }
+        }
+    }
+    
+\end{lstlisting}
+\subsubsection{Visual Analysis}
+
+One of most common applications of soft bodies is in video games and movies, so it makes sense to start the analysis by the animating the interaction of soft body with ground or animate a bounce, so to speak.
+\end{multicols}
+%need to insert image here without multicols
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/animationScreenshots/beforeCollision.png}}
+        \caption{Before collision}
+        \label{fig:subfig1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/animationScreenshots/duringCollision.png}}
+        \caption{During collision}
+        \label{fig:subfig2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/animationScreenshots/postCollision.png}}
+        \caption{Post collision}
+        \label{fig:subfig3}
+    \end{subfigure}
+    \caption{Stages of soft body evolution during bounce simulation}
+    \label{fig:softBallBounceStages}
+\end{figure}
+\begin{multicols}{2}
+
+As can be seen in animation snapshots in \ref{fig:softBallBounceStages}, the behaviour of the softBall in the rendered animation resembles a real world soft body.
+\subsubsection{Compute speed with number of nodes}
+To start with quantitative analysis, it's a good idea to put the system to it's computational limits. I run the simulation for multiple \texttt{softBall2()} objects with varying number of surface nodes ranging from 10 to a 1000 using the loop:
+\begin{lstlisting}
+double dt = 0.01;
+int steps = 1000;
+
+for (int n = 10; n <= steps; n += 10) {
+    softBall2 ball = new softBall2(ballCenter, n, k, k2, kArea, R, b, c, c2, false);
+    ball.setStepSize(dt);
+
+    long startTime = System.nanoTime();
+    for (int i = 0; i < steps; i++) {
+        ball.applyGroundCollision(-3, 0.5, 0.0);
+        ball.step();
+    }
+    long endTime = System.nanoTime();
+    double elapsedMs = (endTime - startTime) / 1e6;
+
+    computeTimePlot.append(0, n, elapsedMs);
+    System.out.printf("n = %d\tTime = %.3f ms%n", n, elapsedMs);
+}
+\end{lstlisting}
+The full code \texttt{computeTimeNumNodesApp.java} can be found in the code listings. The output plot below shows a non-linear scaling of compute time with the number of surface nodes, which is somewhat expected as there are $n^2-n$ computations of force calculation at each timestep for a soft ball of $n$ surface nodes (plus other calculations).
+\begin{centering}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{media/softBall2/computeSpeedVsN.png}
+    \end{figure}
+\end{centering}
+
+
+\subsubsection{Effects of spring damping on area conservation}
+A trivial test for stability of elastic systems is to see how well they tend to return to their original configuration post deformation. To see how the soft body behaves with different types values of spring damping, I plotted the area vs time for different values of both $c$ and $c2$.
+\end{multicols}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{media/softBall2/areaVsTimeForDifferentSpringDamping/dampingArea.png}
+    \caption{Area vs Time plot of a soft ball with $n$=10, $k=k2=$100, $R$ = 1 and groundY = -3 }
+    \label{fig:areaVtime}
+\end{figure}
+
+\begin{multicols}{2}
+    
+The first row of the figure \ref{fig:areaVtime} are the plots for no damping in surface springs, and different values of damping for inner springs. As can be concluded from the plots, the inner spring dampings increases the stability of the soft ball.
+
+The second row of figure \ref{fig:areaVtime} are the plots for no damping in the inner springs, and different values of damping for the surface springs. The increase in damping of surface springs makes the soft body susceptible to unstable behaviour post collision with ground.
+
+\subsubsection{Phase Plots}
+
+To understand the energy fluctuations and verify energy conservation, I plot the phse plots of the x-component, y-component and the total momentum. 
+The main loop of the \texttt{phasePlotsApp} is:
+\begin{lstlisting}
+double dt = 0.01;
+double steps = 10000;
+for (int i = 0; i<steps; i++){
+    ball.applyGroundCollision(-3, 0.5, 0.5);
+    ball.step();
+    x = ball.getStateVec()[2*nodeIndex].x;
+    vx = ball.getStateVec()[2*nodeIndex+1].x;
+
+    y = ball.getStateVec()[2*nodeIndex].y;
+    vy = ball.getStateVec()[2*nodeIndex+1].y;
+
+    r = Math.sqrt(
+        Math.pow((
+        ball.getStateVec()[2*nodeIndex].x),
+        2)
+    +Math.pow((
+        ball.getStateVec()[2*nodeIndex].y)
+        ,2)
+        );
+    p = Math.sqrt(
+        Math.pow(
+        (ball.getStateVec()[2*nodeIndex+1].x),
+        2)
+        +Math.pow(
+        (ball.getStateVec()[2*nodeIndex+1].y),
+        2)
+        );
+
+
+    xPhaseSpace.append(1, x,vx);
+    yPhaseSpace.append(1, y,vy);
+    xyPhaseSpace.append(1, r,p);
+}
+
+\end{lstlisting}
+\end{multicols}
+
+
+
+
+
+\vspace{-1cm} % Adjust vertical spacing to prevent the figure from jumping to the next page
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/no damping/node 0/x.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/no damping/node 0/y.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/no damping/node 0/xy.png}}
+        \caption{}
+    \end{subfigure}
+    \caption{Phase plots of node 0, no damping}
+    \label{fig:phPlotNode0NoDamp}
+\end{figure}
+\vspace{-0.8cm} % Adjust vertical spacing to prevent the figure from jumping to the next page
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/no damping/node 3/x.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/no damping/node 3/y.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/no damping/node 3/xy.png}}
+        \caption{}
+    \end{subfigure}
+    \caption{Phase plots of node 3, no damping}
+    \label{fig:phPlotNode3NoDamp}
+\end{figure}
+
+\newpage
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/innerDamp0dot9SurfDamp0dot5/node 0/x.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/innerDamp0dot9SurfDamp0dot5/node 0/y.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/innerDamp0dot9SurfDamp0dot5/node 0/xy.png}}
+        \caption{}
+    \end{subfigure}
+    \caption{Phase plots of node 0, $c =$ 0.5, $c_2 =$ 0.9}
+    \label{fig:phPlotNode0Damp}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/innerDamp0dot9SurfDamp0dot5/node 3/x.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/innerDamp0dot9SurfDamp0dot5/node 3/y.png}}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \fbox{\includegraphics[width=\textwidth]{media/softBall2/Phase Plots/innerDamp0dot9SurfDamp0dot5/node 3/xy.png}}
+        \caption{}
+    \end{subfigure}
+    \caption{Phase plots of node 3, $c =$ 0.5, $c_2 =$ 0.9}
+    \label{fig:phPlotNode3Damp}
+\end{figure}
+
+\begin{multicols}{2}
+    Figrue \ref{fig:phPlotNode0Damp} shows the phase plots for node 0 (the right most surface node). All the plots seems to be show stability. The sperad for momentum in x seems to be larger, as compared to the y component. This is also true for node 3 is the node that makes contact with the ground. From the phase plots in figure \ref{fig:phPlotNode0Damp} and \ref{fig:phPlotNode3NoDamp}, it can also be seen that the plots are attractors which is due to the fact that the collision with ground was completely inelastic causing energy loss in the soft ball.
+    
+    The phase plots in figures \ref{fig:phPlotNode0Damp} and \ref{fig:phPlotNode3Damp} converge to a point quicker as compared to no spring damping case. This is because in addition to inelastic collision with ground, the energy of the sofy ball is being disspated by damping of the springs of the soft body.
+\end{multicols}
+
